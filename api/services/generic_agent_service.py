@@ -10,5 +10,5 @@ class GenericAgentService:
         self.llm = LocalOllamaLLMWrapper()
         self.agent = ReactAgent(self.llm.get_model(), system_prompt=system_prompt, name=name)
 
-    def run(self, messages: list[BaseMessage]):
-        return self.agent.invoke(messages)
+    def run(self, messages: list[BaseMessage], thread_id: str = None):
+        return self.agent.invoke(messages, {"configurable": {"thread_id": thread_id}})

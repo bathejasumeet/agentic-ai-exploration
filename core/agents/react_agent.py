@@ -3,13 +3,10 @@ from typing import Any
 from langchain.agents import create_agent
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import BaseMessage
-from pydantic import BaseModel
+from langchain_core.runnables import RunnableConfig
+from langgraph.checkpoint.memory import InMemorySaver
 
-from core.base.agent import BaseAgent
-
-
-class MessagesInput(BaseModel):
-    messages: list[BaseMessage]
+from core.base.agent import BaseAgent, MessagesInput
 
 
 class ReactAgent(BaseAgent):
@@ -18,9 +15,10 @@ class ReactAgent(BaseAgent):
         self.agent = create_agent(
             model=llm,
             system_prompt=system_prompt,
+            checkpointer=InMemorySaver(),
             name=name,
             tools=[]
         )
 
-    def invoke(self, messages: list[BaseMessage]) -> Any:
-        return self.agent.invoke(MessagesInput(messages=messages))
+    def invoke(self, messages: list[BaseMessage], configurable_input: RunnableConfig) -> Any:
+        return self.agent.invoke(MessagesInput(messages=messages), config=configurable_input)
