@@ -1,0 +1,100 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+share/python-wheels/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+.env
+.env.*
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# PyCharm
+.idea/
+*.iml
+workspace.xml
+tasks.xml
+dictionaries/
+
+# VS Code
+.vscode/
+
+# IDE / editor backups
+*~
+*.swp
+*.swo
+
+# Pytest / test caches
+.pytest_cache/
+
+# Mypy / type checkers
+.mypy_cache/
+.dmypy.json
+
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+nosetests.xml
+
+# Logs, runtime, temp
+*.log
+logs/
+tmp/
+*.pid
+*.sock
+*.cache
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Docker (ignore local overrides and env files)
+docker-compose.override.yml
+.env.local
+.env.*.local
+
+# PyInstaller
+# if used, it can create a lot of artifacts
+dist/
+
+# Tooling / locks / runtime configs
+.python-version
+Pipfile.lock
+poetry.lock
+
+# Secret / credential files
+*.pem
+*.key
+secrets.json
+credentials
+aws_credentials
+
+# Misc
+.cache/
+.cache
