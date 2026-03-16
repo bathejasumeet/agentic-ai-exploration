@@ -14,12 +14,7 @@ class GenericAgentRequest(BaseModel):
     message: str
 
 app = FastAPI()
-generic_agent_service = GenericAgentService(
-    system_prompt="""
-    You are a helpful assistant that can answer questions and perform tasks based on user input.
-    You are allowed to be creative.
-    Be friendly to the user, it is ok to crack jokes, but always be helpful and informative.""")
-
+generic_agent_service = GenericAgentService()
 
 @app.post("/api/v1/agent-service/chat-agent/chat")
 def chat(
