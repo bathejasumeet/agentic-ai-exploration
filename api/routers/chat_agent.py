@@ -16,7 +16,7 @@ class GenericAgentRequest(BaseModel):
     message: str
 
 
-@router.post("/api/v1/agent-service/chat-agent/chat")
+@router.post("/chat")
 def chat(
     message: GenericAgentRequest,
     x_client_id: Optional[str] = Header(None, alias="X-Client-Id"),

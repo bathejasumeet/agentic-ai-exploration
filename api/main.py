@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI, APIRouter
-from routers.chat_agent import router as chat_agent_router
+from .routers.chat_agent import router as chat_agent_router
 
 
 app = FastAPI()
