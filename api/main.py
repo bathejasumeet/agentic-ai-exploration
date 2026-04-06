@@ -1,6 +1,11 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import uvicorn
+import os
 from fastapi import FastAPI, APIRouter
 from .routers.chat_agent import router as chat_agent_router
+
 
 
 app = FastAPI()
