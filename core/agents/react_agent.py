@@ -1,4 +1,5 @@
 import os
+import warnings
 from typing import Any
 
 import psycopg
@@ -18,25 +19,28 @@ class ReactAgent(BaseAgent):
         self.llm = llm
         self._conn = None
         if "POSTGRES_URI_CUSTOM" in os.environ:
-            self._conn = psycopg.connect(os.environ["POSTGRES_URI_CUSTOM"], autocommit=True)
-            checkpointer = PostgresSaver(self._conn)
-            checkpointer.setup()
-            self.agent = create_agent(
-                model=llm,
-                system_prompt=system_prompt,
-                checkpointer=checkpointer,
-                name=name,
-                tools=[]
-            )
+            try:
+                self._conn = psycopg.connect(os.environ["POSTGRES_URI_CUSTOM"], autocommit=True)
+                checkpointer = PostgresSaver(self._conn)
+                checkpointer.setup()
+                self.agent = create_agent(
+                    model=llm,
+                    system_prompt=system_prompt,
+                    checkpointer=checkpointer,
+                    name=name,
+                    tools=[]
+                )
+                return
+            except Exception as e:
+                warnings.warn(f"Docker is not up, starting in memory: {e}", RuntimeWarning)
 
-        else:
-            self.agent = create_agent(
-                model=llm,
-                system_prompt=system_prompt,
-                checkpointer=InMemorySaver(),
-                name=name,
-                tools=[]
-            )
+        self.agent = create_agent(
+            model=llm,
+            system_prompt=system_prompt,
+            checkpointer=InMemorySaver(),
+            name=name,
+            tools=[]
+        )
 
 
     def invoke(self, messages: list[BaseMessage], configurable_input: RunnableConfig) -> Any:
