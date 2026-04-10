@@ -1,9 +1,8 @@
-from typing import Dict, Annotated
+from typing import Dict
 
 from langchain_core.messages import HumanMessage
 from langgraph.constants import START, END
 from langgraph.graph import MessagesState, StateGraph
-from pydantic import Field
 
 from core.llms.local_ollama_llm_wrapper import LocalOllamaLLMWrapper
 
@@ -81,5 +80,5 @@ if __name__ == '__main__':
             'describe cities in a single line',
             'add a story about a person in the city in three lines for each of the city'
         ],
-        'current_prompt_index':0
+        'current_prompt_index': 0
     })
