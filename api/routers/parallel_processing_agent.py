@@ -31,5 +31,5 @@ def chat(
         )
     result = parallel_prompting_service.invoke(request.prompts)['final_result']
     return ParallelProcessingResponse(
-        response=result['messages'][-1].content
+        response=result.content
     )
