@@ -36,15 +36,15 @@ class State(TypedDict):
 class OrchestratorSynthesizerService:
     def __init__(self):
         self.llm = LocalOllamaLLMWrapper().get_model()
-        self.planner_llm = self.llm.with_structured_output(Section)
-        self.worker_llm = self.llm.with_structured_output(WorkerState)
+        self.planner = self.llm.with_structured_output(Section)
+        self.worker = self.llm.with_structured_output(WorkerState)
 
     def orchestrator(self, state: State):
         """
         Orchestrator that plans splits the task into multiple subtasks
         """
         # Generate queries
-        report_sections = self.planner_llm.invoke(
+        report_sections = self.planner.invoke(
             [
                 SystemMessage(content="Generate a plan for the report."),
                 HumanMessage(content=f"Here is the report topic: {state['topic']}"),
