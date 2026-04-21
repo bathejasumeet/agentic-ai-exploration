@@ -23,21 +23,22 @@ class PlannerState(BaseModel):
 
 
 class WorkerState(TypedDict):
-    section: Section
-    completed_sections: Annotated[list, operator.add]
+        section: Section
+        completed_sections: Annotated[list, operator.add]
 
 
 class State(TypedDict):
     topic: str
     sections: list[Section]
     completed_sections: Annotated[list, operator.add]
+    final_report: str
 
 
 class OrchestratorSynthesizerService:
     def __init__(self):
         self.llm = LocalOllamaLLMWrapper().get_model()
-        self.planner = self.llm.with_structured_output(Section)
-        self.worker = self.llm.with_structured_output(WorkerState)
+        self.planner = self.llm.with_structured_output(PlannerState)
+        self.worker = self.llm
 
     def orchestrator(self, state: State):
         """
@@ -54,7 +55,11 @@ class OrchestratorSynthesizerService:
         return {"sections": report_sections.sections}
 
     def worker(self, state: WorkerState):
-        pass
+        section = self.worker.invoke([
+            SystemMessage(content="Generate a report on the topic and details that user provides. Make it informed"),
+            HumanMessage(content=f"Generate a report on {state['section'].name} focusing on the details {state['section'].details}")
+        ])
+        return {'completed_sections': section}
 
     def synthesizer(self, state: State):
         pass
