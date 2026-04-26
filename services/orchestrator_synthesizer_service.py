@@ -41,7 +41,7 @@ class OrchestratorSynthesizerService:
     def __init__(self):
         self.llm = LocalOllamaLLMWrapper().get_model()
         self.planner = self.llm.with_structured_output(PlannerState)
-        self.worker = self.llm
+        self.worker_llm = self.llm
         self.graph = self.create_graph()
 
     def create_graph(self):
@@ -62,7 +62,7 @@ class OrchestratorSynthesizerService:
         # Generate queries
         report_sections = self.planner.invoke(
             [
-                SystemMessage(content="Generate a plan for the report."),
+                SystemMessage(content="Generate a plan for the report with atmost 3 sections. Each section should contain a distinct sub topic as name to elaborate on and a two line description on what it exactly should focus on - mentioning the main topic as well."),
                 HumanMessage(content=f"Here is the report topic: {state['topic']}"),
             ]
         )
@@ -70,7 +70,7 @@ class OrchestratorSynthesizerService:
         return {"sections": report_sections.sections}
 
     def worker(self, state: WorkerState):
-        section = self.worker.invoke([
+        section = self.worker_llm.invoke([
             SystemMessage(content="Generate a report on the topic and details that user provides. Make it informed"),
             HumanMessage(
                 content=f"Generate a report on {state['section'].name} focusing on the details {state['section'].details}")
@@ -95,6 +95,7 @@ class OrchestratorSynthesizerService:
 
 if __name__ == '__main__':
     orchestratorSynthesizerService = OrchestratorSynthesizerService()
-    orchestratorSynthesizerService.invoke({
+    result = orchestratorSynthesizerService.invoke({
         "topic": "climate change"
     })
+    print(result)
