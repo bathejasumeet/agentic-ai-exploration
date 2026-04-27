@@ -1,5 +1,5 @@
 import operator
-from typing import TypedDict, Annotated, Dict
+from typing import TypedDict, Annotated
 
 from langchain_core.messages import SystemMessage, HumanMessage
 from langgraph.constants import START, END
@@ -62,7 +62,8 @@ class OrchestratorSynthesizerService:
         # Generate queries
         report_sections = self.planner.invoke(
             [
-                SystemMessage(content="Generate a plan for the report with atmost 3 sections. Each section should contain a distinct sub topic as name to elaborate on and a two line description on what it exactly should focus on - mentioning the main topic as well."),
+                SystemMessage(
+                    content="Generate a plan for the report with atmost 3 sections. Each section should contain a distinct sub topic as name to elaborate on and a two line description on what it exactly should focus on - mentioning the main topic as well."),
                 HumanMessage(content=f"Here is the report topic: {state['topic']}"),
             ]
         )
@@ -89,13 +90,14 @@ class OrchestratorSynthesizerService:
         """Assign a worker to each section in the plan"""
         return [Send("worker", {"section": s}) for s in state["sections"]]
 
-    def invoke(self, initial_state: Dict):
-        result = self.graph.invoke(initial_state)
+    def invoke(self, topic: str):
+        result = self.graph.invoke({
+            "topic": topic
+        })
         return result
+
 
 if __name__ == '__main__':
     orchestratorSynthesizerService = OrchestratorSynthesizerService()
-    result = orchestratorSynthesizerService.invoke({
-        "topic": "climate change"
-    })
+    result = orchestratorSynthesizerService.invoke("climate change")
     print(result['final_report'])
