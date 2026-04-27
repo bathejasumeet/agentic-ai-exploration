@@ -75,7 +75,7 @@ class OrchestratorSynthesizerService:
             HumanMessage(
                 content=f"Generate a report on {state['section'].name} focusing on the details {state['section'].details}")
         ])
-        return {'completed_sections': section}
+        return {'completed_sections': [section]}
 
     def synthesizer(self, state: State):
         """
@@ -98,4 +98,4 @@ if __name__ == '__main__':
     result = orchestratorSynthesizerService.invoke({
         "topic": "climate change"
     })
-    print(result)
+    print(result['final_report'])
